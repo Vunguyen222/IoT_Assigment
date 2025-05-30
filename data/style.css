@@ -1,0 +1,10 @@
+body {
+  background: linear-gradient(135deg, #ece9e6, #ffffff);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.card {
+  border-radius: 16px;
+  border: none;
+  background-color: red;
+}
