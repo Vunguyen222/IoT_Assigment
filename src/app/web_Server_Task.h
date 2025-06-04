@@ -3,10 +3,12 @@
 
 #include <ESPAsyncWebServer.h>
 #include <SPIFFS.h>
+#include "utils/global.h"
 
 extern AsyncWebServer server;
+extern volatile bool isWifiConnected;
 
-void webServerTask(void *pvParameters);
-void initWebServerTask();
+void openWebServer();
+void closeWebServer();
 
 #endif
