@@ -11,7 +11,7 @@ void readRFIDTask(void *pvParameters)
         // Kiểm tra có thẻ mới không
         if (!mfrc522.PICC_IsNewCardPresent())
         {
-            Serial.println("No new card");
+            // Serial.println("No new card");
             vTaskDelay(500 / portTICK_PERIOD_MS);
             continue;
         }

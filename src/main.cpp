@@ -20,8 +20,12 @@ void setup()
 
     loadWiFisFromFlash();
     handleAccessPoint();
-    mq2Init();
-    xTaskCreate(readMQ2Sensor, "readMQ2Sensor", 4096, NULL, 1, NULL);
+    while (!isWifiConnected)
+    {
+    }
+    
+    // mq2Init();
+    // xTaskCreate(readMQ2Sensor, "readMQ2Sensor", 4096, NULL, 1, NULL);
     // preferences.begin("wifi", false);
     // preferences.clear();
     // preferences.end();

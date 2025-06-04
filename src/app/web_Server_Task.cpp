@@ -56,6 +56,13 @@ void openWebServer()
         return;
     }
 
+    // Kiểm tra file
+  if (SPIFFS.exists("/index.html")) {
+    Serial.println("File exists!");
+  } else {
+    Serial.println("File does NOT exist.");
+  }
+
     // Route for root / web page
     server.on("/", HTTP_GET, [](AsyncWebServerRequest *request)
               { request->send(SPIFFS, "/index.html", "text/html"); });

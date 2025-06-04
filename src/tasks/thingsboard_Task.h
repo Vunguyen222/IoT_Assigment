@@ -18,9 +18,6 @@ constexpr int16_t telemetrySendInterval = 5000U;
 extern Arduino_MQTT_Client mqttClient;
 extern ThingsBoard tb;
 
-extern bool attributesChanged;
-extern bool ledState;  // LED status
-
 void thingsBoardTask(void *pvParameters);
 
 #endif

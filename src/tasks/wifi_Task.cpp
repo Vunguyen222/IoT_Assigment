@@ -2,22 +2,12 @@
 constexpr char WIFI_SSID[] = "Không-Cho-Pass";
 constexpr char WIFI_PASSWORD[] = "511aaabbbcccabc@<???###";
 WiFiClient wifiClient;
-void InitWifi()
-{
-    Serial.print("Connecting to AP ... ");
-    WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
-    while (WiFi.status() != WL_CONNECTED)
-    {
-        delay(500);
-        Serial.print(".");
-    }
-    Serial.println("Connected to AP");
-}
+
 bool reconnect()
 {
     if (WiFi.status() != WL_CONNECTED)
     {
-        InitWifi();
+        initWifi();
     }
     return WiFi.status() == WL_CONNECTED;
 }

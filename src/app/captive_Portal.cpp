@@ -33,6 +33,7 @@ void handleAccessPoint()
         // access wifi here
         if (initWifi())
         {
+            isWifiConnected = true;
             break;
         }
     }
