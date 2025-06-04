@@ -1,43 +1,60 @@
 #include "web_Server_Task.h"
 
 AsyncWebServer server(80);
+volatile bool isWifiConnected = false;
+
+void closeWebServer()
+{
+    Serial.println("Close web server");
+    server.end();
+}
 
 void handleWiFiCredentials(AsyncWebServerRequest *request)
 {
-    String ssid, password;
-
     if (request->hasParam("ssid", true) && request->hasParam("password", true))
     {
-        ssid = request->getParam("ssid", true)->value();
-        password = request->getParam("password", true)->value();
+        currentSSID = request->getParam("ssid", true)->value();
+        currentPassword = request->getParam("password", true)->value();
 
-        Serial.println("Received SSID: " + ssid);
-        Serial.println("Received Password: " + password);
+        Serial.println("Received SSID: " + currentSSID);
+        Serial.println("Received Password: " + currentPassword);
 
-        // Gọi hàm kết nối WiFi hoặc lưu lại nếu muốn
-        // connectToWiFi(ssid, password);
+        request->send(200, "text/html", "<h2>Connecting to WiFi...</h2>");
+        // connect to wifi
+        if (initWifi())
+        {
+            // success
+            // check wifi exist or not
+            if (!isExistWifi(currentSSID, currentPassword))
+            {
+                if (!saveWiFiCredential(currentSSID, currentPassword))
+                {
+                    request->send(403, "text/html", "<h2> Can not add more wifi </h2>");
+                    // disconnect wifi
+                    disconnectWifi();
+                }
+            }
+            isWifiConnected = true;
+        }
+        else
+        {
+            // failed
+            request->send(SPIFFS, "/index.html", "text/html");
+        }
     }
-
-    request->send(200, "text/html", "<h2>Đang kết nối WiFi...</h2>");
+    else
+        request->send(SPIFFS, "/index.html", "text/html");
 }
 
-void webServerTask(void *pvParameters)
+void openWebServer()
 {
+    Serial.println("Open web server");
     // spiffs use for saving file into flash mem
     if (!SPIFFS.begin(true))
     {
         Serial.println("An Error has occurred while mounting SPIFFS");
-        vTaskDelete(NULL);
+        return;
     }
-
-    // if (SPIFFS.exists("/bootstrap.min.css"))
-    // {
-    //     Serial.println("index.html FOUND in SPIFFS!");
-    // }
-    // else
-    // {
-    //     Serial.println("index.html NOT FOUND in SPIFFS!");
-    // }
 
     // Route for root / web page
     server.on("/", HTTP_GET, [](AsyncWebServerRequest *request)
@@ -61,10 +78,4 @@ void webServerTask(void *pvParameters)
     // Start server
     server.begin();
     Serial.println("[INFO] Web server started!");
-    vTaskDelete(NULL);
-}
-
-void initWebServerTask()
-{
-    xTaskCreate(webServerTask, "webServerTask", 8192, NULL, 1, NULL);
 }
