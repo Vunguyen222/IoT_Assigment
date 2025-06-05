@@ -1,9 +1,7 @@
 #include "thingsboard_Task.h"
 
-Arduino_MQTT_Client mqttClient(wifiClient);
-ThingsBoard tb(mqttClient, MAX_MESSAGE_SIZE);
-
-RPC_Response setDoorSwitchState(const RPC_Data &data) {
+RPC_Response setDoorSwitchState(const RPC_Data &data)
+{
   Serial.println("Received Switch state");
   bool newState = data;
   Serial.print("Switch state change: ");
@@ -16,14 +14,17 @@ RPC_Response setDoorSwitchState(const RPC_Data &data) {
 }
 
 const std::array<RPC_Callback, 1U> callbacks = {
-  RPC_Callback{"setDoorSwitchValue", setDoorSwitchState}
-};
+    RPC_Callback{"setDoorSwitchValue", setDoorSwitchState}};
 
-void thingsBoardTask(void *pvParameters) {
-  while (true) {
-    if (!tb.connected()) {
+void thingsBoardTask(void *pvParameters)
+{
+  while (true)
+  {
+    if (!tb.connected())
+    {
       Serial.println("Connecting to ThingsBoard...");
-      if (!tb.connect(THINGSBOARD_SERVER, TOKEN, THINGSBOARD_PORT)) {
+      if (!tb.connect(THINGSBOARD_SERVER, TOKEN, THINGSBOARD_PORT))
+      {
         Serial.println("Failed to connect to ThingsBoard");
         vTaskDelay(3000 / portTICK_PERIOD_MS);
         continue;
@@ -39,7 +40,7 @@ void thingsBoardTask(void *pvParameters) {
       }
       Serial.println("Subscribed for RPC");
     }
-    tb.loop();
+    // tb.loop();
     vTaskDelay(10 / portTICK_PERIOD_MS);
   }
 }
