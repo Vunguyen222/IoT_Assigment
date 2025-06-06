@@ -1,7 +1,4 @@
 #include "wifi_Task.h"
-constexpr char WIFI_SSID[] = "Không-Cho-Pass";
-constexpr char WIFI_PASSWORD[] = "511aaabbbcccabc@<???###";
-WiFiClient wifiClient;
 
 bool reconnect()
 {
