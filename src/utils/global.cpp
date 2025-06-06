@@ -22,7 +22,6 @@ Espressif_Updater updater;
 bool currentFWSent = false;
 bool updateRequestSent = false;
 bool updateSubscribeSent = false;
-bool subscribed = false;
 
 bool requestedShared = false;
 std::array<const char *, 1U> REQUESTED_SHARED_ATTRIBUTES = {FW_VER_KEY};

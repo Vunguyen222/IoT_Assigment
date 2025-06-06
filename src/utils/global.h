@@ -50,13 +50,6 @@ extern const uint16_t FIRMWARE_PACKET_SIZE;
 
 extern Espressif_Updater updater;
 
-extern bool currentFWSent;
-extern bool updateRequestSent;
-extern bool updateSubscribeSent;
-extern bool subscribed;
-extern std::array<const char *, 1U> REQUESTED_SHARED_ATTRIBUTES;
-extern const Attribute_Request_Callback sharedCallback;
-
 uint8_t initWifi();
 uint8_t disconnectWifi();
 uint8_t isExistWifi(const String ssid, const String password);
