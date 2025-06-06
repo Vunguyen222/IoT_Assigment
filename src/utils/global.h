@@ -31,9 +31,6 @@ extern int amountWifiCred;
 
 extern MQUnifiedsensor MQ2;
 
-extern TaskHandle_t mq2TaskHandle;
-extern TaskHandle_t rfidTaskHandle;
-
 // constexpr char TOKEN[] = "69o42qcjtwnwdwnsgomy";
 constexpr char TOKEN[] = "7l23s5snln10k419oc0n";
 constexpr char THINGSBOARD_SERVER[] = "app.coreiot.io";

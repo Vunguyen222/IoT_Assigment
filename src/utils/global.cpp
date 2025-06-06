@@ -8,9 +8,6 @@ String currentPassword = "";
 int amountWifiCred = 0;
 MQUnifiedsensor MQ2(BOARD, VOLTAGE_RESOLUTION, ADC_BIT_RESOLUTION, MQ2_PIN, TYPE);
 
-TaskHandle_t mq2TaskHandle = NULL;
-TaskHandle_t rfidTaskHandle = NULL;
-
 WiFiClient wifiClient;
 Arduino_MQTT_Client mqttClient(wifiClient);
 ThingsBoard tb(mqttClient, MAX_MESSAGE_SIZE);
