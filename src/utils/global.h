@@ -57,8 +57,7 @@ extern bool subscribed;
 extern std::array<const char *, 1U> REQUESTED_SHARED_ATTRIBUTES;
 extern const Attribute_Request_Callback sharedCallback;
 
-uint8_t
-initWifi();
+uint8_t initWifi();
 uint8_t disconnectWifi();
 uint8_t isExistWifi(const String ssid, const String password);
 
@@ -69,8 +68,6 @@ uint8_t saveWiFiCredential(const String ssid, const String password);
 void loadWiFisFromFlash();
 
 void mq2Init();
-
-void subscribeSharedAttributes();
 
 void requestFirmwareUpdate();
 void subscribeFirmwareUpdate();

@@ -6,7 +6,6 @@
 #include "tasks/thingsboard_Task.h"
 #include "utils/servo.h"
 #include "tasks/wifi_Task.h"
-#include "tasks/shared_Attributes_Task.h"
 
 void setup()
 {
@@ -20,32 +19,20 @@ void setup()
     {
     }
 
-    // preferences.begin("wifi", false);
-    // preferences.clear();
-    // preferences.end();
-    // preferences.begin("amountWifiCred", false);
-    // preferences.clear();
-    // preferences.end();
-
     xTaskCreate(wifiTask, "Wifi Task", 4096, NULL, 1, NULL);
     xTaskCreate(thingsBoardTask, "ThingsBoard Task", 8192, NULL, 1, NULL);
-    // xTaskCreate(shared_Attributes_Task, "Shared Attributes Task", 2048, NULL, 1, NULL);
 
     while (!tb.connected())
     {
     }
     readVersion();
     requestFirmwareUpdate();
-    // khoi chay task
-    // task mq2
-    // task nhiet do
-    // task rfid
 
     mq2Init();
 
     SPI.begin(SCK_PIN, MISO_PIN, MOSI_PIN);
     servoSetup();
-    mfrc522.PCD_Init(); // Initialize the RFID reader
+    mfrc522.PCD_Init();
     Serial.println("RC522 init done");
     // Check version register to verify communication
     byte version = mfrc522.PCD_ReadRegister(mfrc522.VersionReg);
