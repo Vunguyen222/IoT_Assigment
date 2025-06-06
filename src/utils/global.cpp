@@ -15,7 +15,7 @@ WiFiClient wifiClient;
 Arduino_MQTT_Client mqttClient(wifiClient);
 ThingsBoard tb(mqttClient, MAX_MESSAGE_SIZE);
 
-const char CURRENT_FIRMWARE_TITLE[32] = "aaaaajfjfjfjf";
+const char CURRENT_FIRMWARE_TITLE[32] = "OTA";
 char CURRENT_FIRMWARE_VERSION[32];
 const uint8_t FIRMWARE_FAILURE_RETRIES = 12U;
 const uint16_t FIRMWARE_PACKET_SIZE = 4096U;
@@ -27,17 +27,18 @@ bool updateRequestSent = false;
 bool subscribed = false;
 
 bool requestedShared = false;
-std::array<const char *, 1U> REQUESTED_SHARED_ATTRIBUTES = {FW_TITLE_KEY};
+std::array<const char *, 1U> REQUESTED_SHARED_ATTRIBUTES = {FW_VER_KEY};
 const Attribute_Request_Callback sharedCallback(&processSharedAttributeRequest, REQUESTED_SHARED_ATTRIBUTES.cbegin(), REQUESTED_SHARED_ATTRIBUTES.cend());
 
 uint8_t initWifi()
 {
     WiFi.begin(currentSSID, currentPassword);
     uint8_t timeout = 3;
-    while (WiFi.status() != WL_CONNECTED && timeout--)
+    while (WiFi.status() != WL_CONNECTED && timeout)
     {
         vTaskDelay(1000 / portTICK_PERIOD_MS);
         Serial.println("...");
+        timeout--;
     }
     if (timeout)
         Serial.println("Connected to " + currentSSID);
@@ -172,9 +173,7 @@ void requestFirmwareUpdate()
 
         Serial.println(F("Firwmare Update..."));
         const OTA_Update_Callback callback(&progressCallback, &updatedCallback, CURRENT_FIRMWARE_TITLE, CURRENT_FIRMWARE_VERSION, &updater, FIRMWARE_FAILURE_RETRIES, FIRMWARE_PACKET_SIZE);
-        Serial.println("kk" + String(callback.Get_Firmware_Title()));
         updateRequestSent = tb.Start_Firmware_Update(callback);
-        Serial.println("kk" + String(callback.Get_Firmware_Title()));
     }
 }
 
@@ -186,7 +185,9 @@ void processSharedAttributeRequest(const Shared_Attribute_Data &data)
         {
             strncpy(CURRENT_FIRMWARE_VERSION, it->value().as<const char *>(), sizeof(CURRENT_FIRMWARE_VERSION));
             CURRENT_FIRMWARE_VERSION[strlen(CURRENT_FIRMWARE_VERSION)] = '\0';
-            Serial.print(CURRENT_FIRMWARE_VERSION);
+            writeVersion();
+            readVersion();
+            esp_restart();
         }
     }
 }
@@ -209,16 +210,11 @@ void updatedCallback(const bool &success)
 {
     if (success)
     {
-        Serial.println(F("Done, Reboot now"));
+        Serial.println(F("Done"));
         requestedShared = tb.Shared_Attributes_Request(sharedCallback);
         if (!requestedShared)
         {
             Serial.println(F("Failed to request shared attributes"));
-        }
-        else
-        {
-            writeVersion();
-            esp_restart();
         }
         return;
     }
@@ -233,7 +229,7 @@ void readVersion()
     String fwVer = preferences.getString("version", "0.0");
     strncpy(CURRENT_FIRMWARE_VERSION, fwVer.c_str(), sizeof(CURRENT_FIRMWARE_VERSION));
     CURRENT_FIRMWARE_VERSION[strlen(CURRENT_FIRMWARE_VERSION)] = '\0';
-    Serial.println("Current firmware version: " + String(CURRENT_FIRMWARE_VERSION));
+    Serial.println("read version: " + String(CURRENT_FIRMWARE_VERSION));
 
     preferences.end();
 }
@@ -242,5 +238,6 @@ void writeVersion()
 {
     preferences.begin("firmware", false);
     preferences.putString("version", CURRENT_FIRMWARE_VERSION);
+    Serial.println("write version: " + String(CURRENT_FIRMWARE_VERSION));
     preferences.end();
 }
