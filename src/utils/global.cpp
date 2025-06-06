@@ -24,6 +24,7 @@ Espressif_Updater updater;
 
 bool currentFWSent = false;
 bool updateRequestSent = false;
+bool updateSubscribeSent = false;
 bool subscribed = false;
 
 bool requestedShared = false;
@@ -174,6 +175,16 @@ void requestFirmwareUpdate()
         Serial.println(F("Firwmare Update..."));
         const OTA_Update_Callback callback(&progressCallback, &updatedCallback, CURRENT_FIRMWARE_TITLE, CURRENT_FIRMWARE_VERSION, &updater, FIRMWARE_FAILURE_RETRIES, FIRMWARE_PACKET_SIZE);
         updateRequestSent = tb.Start_Firmware_Update(callback);
+    }
+}
+
+void subscribeFirmwareUpdate()
+{
+    if (!updateSubscribeSent)
+    {
+        Serial.println("Firwmare Update Subscription...");
+        const OTA_Update_Callback callback(&progressCallback, &updatedCallback, CURRENT_FIRMWARE_TITLE, CURRENT_FIRMWARE_VERSION, &updater, FIRMWARE_FAILURE_RETRIES, FIRMWARE_PACKET_SIZE);
+        updateSubscribeSent = tb.Subscribe_Firmware_Update(callback);
     }
 }
 

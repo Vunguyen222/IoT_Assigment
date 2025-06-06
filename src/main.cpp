@@ -41,28 +41,29 @@ void setup()
     // task nhiet do
     // task rfid
 
-    // mq2Init();
+    mq2Init();
 
-    // SPI.begin(SCK_PIN, MISO_PIN, MOSI_PIN);
-    // servoSetup();
-    // mfrc522.PCD_Init(); // Initialize the RFID reader
-    // Serial.println("RC522 init done");
-    // // Check version register to verify communication
-    // byte version = mfrc522.PCD_ReadRegister(mfrc522.VersionReg);
-    // if (version == 0x00 || version == 0xFF)
-    // {
-    //     Serial.println("ERROR: MFRC522 not responding. Check wiring or power.");
-    // }
-    // else
-    // {
-    //     Serial.print("MFRC522 detected, version: 0x");
-    //     Serial.println(version, HEX);
-    // }
+    SPI.begin(SCK_PIN, MISO_PIN, MOSI_PIN);
+    servoSetup();
+    mfrc522.PCD_Init(); // Initialize the RFID reader
+    Serial.println("RC522 init done");
+    // Check version register to verify communication
+    byte version = mfrc522.PCD_ReadRegister(mfrc522.VersionReg);
+    if (version == 0x00 || version == 0xFF)
+    {
+        Serial.println("ERROR: MFRC522 not responding. Check wiring or power.");
+    }
+    else
+    {
+        Serial.print("MFRC522 detected, version: 0x");
+        Serial.println(version, HEX);
+    }
 
-    // xTaskCreate(readRFIDTask, "RFID Reader", 4096, NULL, 3, NULL);
-    // xTaskCreate(readMQ2Sensor, "readMQ2Sensor", 4096, NULL, 1, NULL);
+    xTaskCreate(readRFIDTask, "RFID Reader", 4096, NULL, 3, NULL);
+    xTaskCreate(readMQ2Sensor, "readMQ2Sensor", 4096, NULL, 1, NULL);
 
     // ota subscribe
+    subscribeFirmwareUpdate();
 }
 
 void loop()

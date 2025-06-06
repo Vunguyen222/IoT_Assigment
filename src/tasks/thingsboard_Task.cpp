@@ -40,7 +40,6 @@ void thingsBoardTask(void *pvParameters)
       }
       Serial.println("Subscribed for RPC");
     }
-    // tb.loop();
-    vTaskDelay(10 / portTICK_PERIOD_MS);
+    vTaskDelay(1000 / portTICK_PERIOD_MS);
   }
 }
