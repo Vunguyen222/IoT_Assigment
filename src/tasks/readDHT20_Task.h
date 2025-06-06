@@ -1,7 +1,7 @@
 #ifndef READ_DHT20
 #define READ_DHT20
 
-#include "WiFi.h"
-
+#include "utils/global.h"
+extern DHT dht22;
 void readDHT(void *pvParameters);
 #endif

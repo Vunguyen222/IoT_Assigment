@@ -9,6 +9,7 @@
 #include <ThingsBoard.h>
 #include <Arduino_MQTT_Client.h>
 #include <Espressif_Updater.h>
+#include <DHT.h>
 
 #define MAX_WIFI_CREDENT 100
 
@@ -19,7 +20,7 @@
 #define RATIO_MQ2_CLEAN_AIR 9.83
 #define MQ2_PIN 34
 
-#define RELAY_PIN 23
+#define RELAY_PIN 5
 
 extern Preferences preferences;
 
@@ -32,7 +33,7 @@ extern int amountWifiCred;
 extern MQUnifiedsensor MQ2;
 
 // constexpr char TOKEN[] = "69o42qcjtwnwdwnsgomy";
-constexpr char TOKEN[] = "7l23s5snln10k419oc0n";
+constexpr char TOKEN[] = "e6HoSLMnV2FUtxdNVIFC";
 constexpr char THINGSBOARD_SERVER[] = "app.coreiot.io";
 constexpr uint16_t THINGSBOARD_PORT = 1883U;
 constexpr uint32_t MAX_MESSAGE_SIZE = 1024U;

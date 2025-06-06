@@ -1,11 +1,12 @@
 #include "app/web_Server_Task.h"
 #include "app/captive_Portal.h"
 #include "utils/global.h"
+#include "utils/servo.h"
 #include "tasks/gas_Detect_Task.h"
 #include "tasks/RFID_Task.h"
 #include "tasks/thingsboard_Task.h"
-#include "utils/servo.h"
 #include "tasks/wifi_Task.h"
+#include "tasks/readDHT20_Task.h"
 
 void setup()
 {
@@ -29,6 +30,7 @@ void setup()
     requestFirmwareUpdate();
 
     mq2Init();
+    dht22.begin();
 
     SPI.begin(SCK_PIN, MISO_PIN, MOSI_PIN);
     servoSetup();
@@ -46,7 +48,8 @@ void setup()
         Serial.println(version, HEX);
     }
 
-    xTaskCreate(readRFIDTask, "RFID Reader", 4096, NULL, 3, NULL);
+    xTaskCreate(readRFIDTask, "RFID Reader", 4096, NULL, 1, NULL);
+    xTaskCreate(readDHT, "read DHT", 2048, NULL, 1, NULL);
     xTaskCreate(readMQ2Sensor, "readMQ2Sensor", 4096, NULL, 1, NULL);
 
     // ota subscribe
