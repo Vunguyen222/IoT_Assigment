@@ -10,7 +10,6 @@ bool reconnect()
 }
 void wifiTask(void *pvParameters)
 {
-    Serial.println("Connecting to Wi-Fi...");
     while (1)
     {
         if (!reconnect())

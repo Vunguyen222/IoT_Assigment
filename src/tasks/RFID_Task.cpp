@@ -1,6 +1,5 @@
 #include "RFID_Task.h"
 
-
 MFRC522 mfrc522(SS_PIN, RST_PIN);
 
 void readRFIDTask(void *pvParameters)
@@ -29,7 +28,8 @@ void readRFIDTask(void *pvParameters)
         //     Serial.printf("%02X ", mfrc522.uid.uidByte[i]);
         // }
         // Serial.println();
-        if(tb.connected()){
+        if (tb.connected())
+        {
             myServo.write(angle);
             tb.sendAttributeData("doorState", angle == 90);
             angle = (angle == 0) ? 90 : 0;

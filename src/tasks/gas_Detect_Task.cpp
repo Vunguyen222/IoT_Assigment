@@ -12,7 +12,7 @@ void readMQ2Sensor(void *pvParameters)
     {
         MQ2.update();
         currentGasValue = MQ2.readSensor();
-        Serial.println(currentGasValue);
+        // Serial.println(currentGasValue);
         if (currentGasValue > upperThreshold && !turnOnRelay)
         {
             Serial.println("Turn on Relay");
